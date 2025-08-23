@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relic</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+</head>
+
+<body>
+    <div class="container">
+        <div id="setup-section">
+            <h2>Setup</h2>
+            <form id="authForm">
+                <label for="clientId">Client ID:</label>
+                <input type="text" id="clientId" name="clientId" required>
+
+                <label for="apiKey">API Key:</label>
+                <input type="password" id="apiKey" name="apiKey" required>
+
+                <label for="deviceInfo">Device Info:</label>
+                <input type="text" id="deviceInfo" name="deviceInfo" placeholder="e.g., Oliver's Desktop" required>
+
+                <button type="submit"><i class="fas fa-save"></i> Save Credentials</button>
+            </form>
+            <p id="setupResponseMessage"></p>
+        </div>
+
+        <div id="quicklog-section" style="display: none;">
+            <h2>Quick Log</h2>
+            <form id="sendDataForm">
+                <div class="chat-input-area">
+                    <textarea id="dataJson" name="dataJson" placeholder="Type your message here..." rows="1"
+                        required></textarea>
+                    <button type="submit"><i class="fas fa-paper-plane"></i></button>
+                </div>
+            </form>
+            <div id="logSavedAnimation" class="log-saved-animation">
+                <i class="fas fa-check-circle"></i>
+            </div>
+            <p id="responseMessage"></p>
+            <hr>
+        </div>
+        <button id="goToSetupButton" class="top-right-button"><i class="fas fa-cog"></i></button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
