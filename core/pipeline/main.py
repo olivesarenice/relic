@@ -3,7 +3,7 @@ import json
 import os
 import sys
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 
 # Add the parent directory to the Python path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -12,7 +12,12 @@ import traceback
 from core import config
 from core.stores import redis
 from core.stores.redis import connect as redis_connect
-from core.stores.sqlite import create_connection, insert_engram
+from core.stores.sqlite import (
+    create_connection,
+    insert_engram,
+    insert_error,
+    insert_datum,
+)
 from core.types.base import Datum
 
 
@@ -46,16 +51,20 @@ def main():
     print(f"Listening on Redis queue: {queue_name}")
 
     while True:
+        message_json = None
         try:
             # Blocking pop from the Redis list
-            _, message_json = redis_client.blpop(queue_name)
-            message = json.loads(message_json)
-            print(f"Received message: {message}")
+            _, d = redis_client.blpop(queue_name)
+            datum_json = json.loads(d)
+            print(f"Received message: {datum_json}")
+            insert_datum(sqlite_conn, datum_json)
+            print(f"datum logged to db")
 
             ##################################
             # Do some engram processing here #
-            print(f"Processing message <{message['uuid'][0:8]}> into an engram...")
-            engram_data = message
+            print(f"Processing message <{datum_json['uuid'][0:8]}> into an engram...")
+            engram_data = datum_json
+            engram_data["data_json"] = {"some_new_key": "some_processed_values"}
             print("Done!")
             ##################################
 
@@ -66,12 +75,20 @@ def main():
             else:
                 print("No engram data to insert.")
 
-        except json.JSONDecodeError as e:
-            print(f"Error decoding JSON: {e}")
         except Exception as e:
             print(f"An unexpected error occurred: {e}")
             traceback.print_exc()
-            break
+            if message_json:
+                now = datetime.now(timezone.utc)
+                error_data = {
+                    "id": str(uuid.uuid4()),
+                    "unix_ts": int(now.timestamp()),
+                    "iso_ts": now.isoformat(),
+                    "input_data": message_json,
+                    "error_message": f"{e}\n{traceback.format_exc()}",
+                }
+                insert_error(sqlite_conn, error_data)
+                print("Error logged to SQLite.")
 
     sqlite_conn.close()
 

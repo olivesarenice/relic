@@ -9,7 +9,7 @@ INGRESS_CREDENTIALS = {os.getenv("CLIENT_ID"): os.getenv("CLIENT_API_KEY")}
 REDIS_HOST = os.getenv("REDIS_HOST", "localhost")
 REDIS_PORT = int(os.getenv("REDIS_PORT", 6379))
 
-print("Configuration loaded:")
-print(f"INGRESS_CREDENTIALS: {INGRESS_CREDENTIALS}")
-print(f"REDIS_HOST: {REDIS_HOST}")
-print(f"REDIS_PORT: {REDIS_PORT}")
+GRAPHITI_LLM_API_KEY = os.getenv("GRAPHITI_LLM_API_KEY")
+NEO4J_URI = os.getenv("NEO4J_URI")
+NEO4J_USER = os.getenv("NEO4J_USER")
+NEO4J_PASSWORD = os.getenv("NEO4J_PASSWORD")

@@ -44,6 +44,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 (error) => {
                     console.error('Error getting location:', error);
                     userLocation = null;
+                    responseMessage.textContent = 'Could not get location. Ensure you are on a secure (https) connection and have granted permission.';
+                    responseMessage.style.color = 'orange';
                 }
             );
         } else {

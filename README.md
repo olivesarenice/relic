@@ -7,3 +7,6 @@ Run using
 Visit `http://localhost:8080/` - enter client_id and api_key set in `.env`
 
  
+ Run the server side consumer (hub) on local script for testing
+
+    uv run core/pipeline/main.py --network localhost
