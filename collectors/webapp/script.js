@@ -147,8 +147,7 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const ingressHost = process.env.INGRESS_HOST || 'localhost:8000';
-            const response = await fetch(`http://${ingressHost}/send`, {
+            const response = await fetch(`https://ingress.relic.apps.oliverq.io/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
