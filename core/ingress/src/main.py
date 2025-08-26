@@ -64,6 +64,7 @@ app = FastAPI()
 origins = [
     "http://localhost",
     "http://localhost:8080",  # Allow requests from the web application
+    "https://webapp.relic.apps.oliverq.io",  # deployed version
 ]
 
 app.add_middleware(
