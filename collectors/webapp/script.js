@@ -147,7 +147,8 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch('http://localhost:8000/send', {
+            const ingressHost = process.env.INGRESS_HOST || 'localhost:8000';
+            const response = await fetch(`http://${ingressHost}/send`, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
