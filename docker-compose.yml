@@ -10,6 +10,18 @@ services:
     networks:
       - local-network
 
+  db-init:
+    env_file:
+      - .env
+    build:
+      context: .
+      dockerfile: ./core/ingress/Dockerfile
+    command: sh -c "uv run python devtools/init_db.py --host $$POSTGRES_HOST"
+    depends_on:
+      - postgres
+    networks:
+      - local-network
+
   ingress:
     env_file:
       - .env
@@ -21,6 +33,7 @@ services:
     depends_on:
       - redis
       - postgres
+      - db-init
     networks:
       - local-network
 
