@@ -147,7 +147,12 @@ document.addEventListener('DOMContentLoaded', () => {
         };
 
         try {
-            const response = await fetch(`https://ingress.relic.apps.oliverq.io/send`, {
+            const isLocal = window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1' || window.location.hostname === '0.0.0.0';
+            const apiUrl = isLocal
+                ? 'http://localhost:8000/send'
+                : 'https://ingress.relic.apps.oliverq.io/send';
+
+            const response = await fetch(apiUrl, {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

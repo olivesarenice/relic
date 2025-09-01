@@ -1,0 +1,89 @@
+# Each line is a 'quicklog' note for test streaming to the backend.
+
+- Docker path not available:
+https://timonweb.com/docker/getting-path-and-accessing-persistent-volumes-in-docker-for-mac/
+
+- study this: https://www.janestreet.com/technology/
+
+- TODO: set up docker for post gres, migrate sqlite to pg, add volumes for the redis and pg servers
+
+- https://youtu.be/ruBm9WywevM?si=EiHhcbkMlTXwpiIf
+
+- https://blog.wilsonl.in/search-engine/
+
+- https://www.amazon.sg/Kill-Chain-Defending-America-High-Tech/dp/031653353X
+
+- https://gist.github.com/codelion/6cbbd3ec7b0ccef77d3c1fe3d6b0a57c
+
+- https://medium.com/asymptotic-spaghetti-integration/from-beta-to-battle-tested-picking-between-letta-mem0-zep-for-ai-memory-
+
+- https://s2.dev/
+
+simple cloud based streams
+
+- 🚀 MLSG  - August 2025 Meetup: Agents, Experts and Extracting Structured Data
+
+📅 Date: Aug 27, 2025 (Wednesday)
+🕗 Time: 7:00PM - 9:00PM SST
+📍 Location: Google Developer Space, Google, Singapore
+🔗 bit.ly/mlsg-aug2025
+
+Talks
+🪄 "LangExtract + New Gemma" by Sam Witteveen
+🪄 "Mixture of Experts Routing" by Florian Kowarsch
+🪄 "How to Spend your Tokens" by Martin Andrews
+
+🚀 View the full agenda & register today! → bit.ly/mlsg-aug2025
+
+- https://ai.google.dev/gemini-api/docs/url-context
+
+- https://github.com/google/langextract
+
+- https://g.co/gemini/share/
+
+- flatcase for modules
+
+PascalCase for structs and traits
+
+snake_case for variables
+
+MACRO_CASE for constants
+
+kebab-case for filesystem entities
+
+snake_colon:case for implementations
+
+- https://grahamduncan.blog/whats-going-on-here/
+
+- https://gist.github.com/cablej/ccfe7fe097d8bbb05519bacfeb910038
+
+- https://arxiv.org/pdf/2504.19413
+
+- 2025-09-01 22.16.37.jpg
+
+- https://youtu.be/Pv9Nwwx_P3Y?si=nvJC8tvwxPW3nE08
+
+- https://g.co/gemini/share/f4031d88c7d7
+
+- https://www.reddit.com/r/algotrading/comments/1h6ljbv/rust_trading_platform_from_scratch_update_2/
+
+- https://www.reddit.com/r/Supabase/comments/1clj4wz/signinwithoauth_always_redirects_to_localhost3000/
+
+- https://youtu.be/_PioN-CpOP0?si=pAAo63taTSgin06o
+
+- https://youtu.be/iwRaNYa8yTw?si=YvtVm5kM708si3PS
+
+- nlp on industry forums for potebtial early controversies
+
+- crypto szar bill
+
+- https://www.diljitpr.net/p/web-url-scraping-designing-a-high
+s
+- https://github.com/nama1arpit/reddit-streaming-pipeline/tree/main
+
+- https://youtu.be/3JW732GrMdg?si=3qCeBFGFh-qFBBHr
+
+- Meal Subscriptions: Offer a meal plan subscription that gives people affordable, protein-packed meals each week. By locking customers into a subscription, you can lower costs for them (due to bulk buying) and increase your margins.
+Protein Snack Box: If complete meals are out of the question, another approach could be offering protein-packed snack boxes for fitness enthusiasts or busy professionals who need quick protein fixes between meals.
+
+- https://www.opinionx.co/blog/customer-problem-stack-ranking

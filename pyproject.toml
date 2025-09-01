@@ -9,6 +9,7 @@ dependencies = [
     "graphiti-core[google-genai]>=0.18.9",
     "httpx>=0.28.1",
     "loguru>=0.7.3",
+    "psycopg2-binary>=2.9.10",
     "pydantic>=2.11.7",
     "python-dotenv>=1.1.1",
     "redis>=6.4.0",

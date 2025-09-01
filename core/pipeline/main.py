@@ -4,6 +4,7 @@ import os
 import sys
 import uuid
 from datetime import datetime, timezone
+from loguru import logger
 
 # Add the parent directory to the Python path to allow for absolute imports
 sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), "../..")))
@@ -12,7 +13,7 @@ import traceback
 from core import config
 from core.stores import redis
 from core.stores.redis import connect as redis_connect
-from core.stores.sqlite import (
+from core.stores.postgres import (
     create_connection,
     insert_engram,
     insert_error,
@@ -22,9 +23,9 @@ from core.types.base import Datum
 
 
 def main():
-    """Main function to listen to Redis and forward to SQLite."""
+    """Main function to listen to Redis and forward to Postgres."""
     parser = argparse.ArgumentParser(
-        description="Relic Pipeline to listen to Redis and forward to SQLite."
+        description="Relic Pipeline to listen to Redis and forward to Postgres."
     )
     parser.add_argument(
         "--network",
@@ -35,20 +36,19 @@ def main():
 
     if args.network == "localhost":
         config.REDIS_HOST = "localhost"
-        print(f"Using local Redis host: {config.REDIS_HOST}")
+        logger.info(f"Using local Redis host: {config.REDIS_HOST}")
 
     redis_client = redis_connect(config.REDIS_HOST, config.REDIS_PORT)
     if not redis_client:
         return
 
-    db_path = "core/stores/data/relic.db"
-    sqlite_conn = create_connection(db_path)
-    if not sqlite_conn:
-        print("Could not connect to SQLite.")
+    postgres_conn = create_connection()
+    if not postgres_conn:
+        logger.error("Could not connect to Postgres.")
         return
 
     queue_name = "hub-inbox"
-    print(f"Listening on Redis queue: {queue_name}")
+    logger.info(f"Listening on Redis queue: {queue_name}")
 
     while True:
         message_json = None
@@ -56,27 +56,29 @@ def main():
             # Blocking pop from the Redis list
             _, d = redis_client.blpop(queue_name)
             datum_json = json.loads(d)
-            print(f"Received message: {datum_json}")
-            insert_datum(sqlite_conn, datum_json)
-            print(f"datum logged to db")
+            logger.info(f"Received message: {datum_json}")
+            insert_datum(postgres_conn, datum_json)
+            logger.info(f"datum logged to db")
 
             ##################################
             # Do some engram processing here #
-            print(f"Processing message <{datum_json['uuid'][0:8]}> into an engram...")
+            logger.info(
+                f"Processing message <{datum_json['uuid'][0:8]}> into an engram..."
+            )
             engram_data = datum_json
             engram_data["data_json"] = {"some_new_key": "some_processed_values"}
-            print("Done!")
+            logger.info("Done!")
             ##################################
 
-            # Insert into SQLite
+            # Insert into Postgres
             if engram_data:
-                insert_engram(sqlite_conn, engram_data)
-                print("Inserted engram to SQLite.")
+                insert_engram(postgres_conn, engram_data)
+                logger.info("Inserted engram to Postgres.")
             else:
-                print("No engram data to insert.")
+                logger.warning("No engram data to insert.")
 
         except Exception as e:
-            print(f"An unexpected error occurred: {e}")
+            logger.error(f"An unexpected error occurred: {e}")
             traceback.print_exc()
             if message_json:
                 now = datetime.now(timezone.utc)
@@ -87,10 +89,10 @@ def main():
                     "input_data": message_json,
                     "error_message": f"{e}\n{traceback.format_exc()}",
                 }
-                insert_error(sqlite_conn, error_data)
-                print("Error logged to SQLite.")
+                insert_error(postgres_conn, error_data)
+                logger.info("Error logged to Postgres.")
 
-    sqlite_conn.close()
+    postgres_conn.close()
 
 
 if __name__ == "__main__":

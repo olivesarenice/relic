@@ -29,12 +29,13 @@ class RedisConnection:
         self.conn.rpush(key, message)
 
 
-def connect(host="localhost", port=6379, db=0):
+def connect(host, port, db=0):
     """Connect to Redis and return a RedisConnection object."""
     try:
-        r = redis.Redis(host=host, port=port, db=db, decode_responses=True)
+        pool = redis.BlockingConnectionPool(host=host, port=port, db=db)
+        r = redis.Redis(connection_pool=pool, decode_responses=True)
         r.ping()
-        print("Successfully connected to Redis.")
+        print(f"Successfully connected to Redis at {host}:{port}")
         return RedisConnection(r)
     except redis.exceptions.ConnectionError as e:
         print(f"Could not connect to Redis: {e}")

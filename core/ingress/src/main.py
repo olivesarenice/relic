@@ -155,7 +155,7 @@ def run_mock_sender():
     """Runs the mock data sender loop."""
     print("Running in mock sender mode...")
     # Use a single connection for the mock sender as well
-    mock_sender_conn = redis.connect()
+    mock_sender_conn = redis.connect(config.REDIS_HOST, config.REDIS_PORT)
     # Empty the queue before starting
     # Assuming mock_sender_conn.conn is the underlying redis-py client
     mock_sender_conn.conn.delete("hub-inbox")
