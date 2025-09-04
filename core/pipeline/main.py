@@ -13,12 +13,7 @@ import traceback
 from core import config
 from core.stores import redis
 from core.stores.redis import connect as redis_connect
-from core.stores.postgres import (
-    create_connection,
-    insert_engram,
-    insert_error,
-    insert_datum,
-)
+from core.stores.postgres import PgClient
 from core.types.base import Datum
 
 
@@ -42,8 +37,8 @@ def main():
     if not redis_client:
         return
 
-    postgres_conn = create_connection()
-    if not postgres_conn:
+    pg_client = PgClient()
+    if not pg_client.conn:
         logger.error("Could not connect to Postgres.")
         return
 
@@ -57,7 +52,7 @@ def main():
             _, d = redis_client.blpop(queue_name)
             datum_json = json.loads(d)
             logger.info(f"Received message: {datum_json}")
-            insert_datum(postgres_conn, datum_json)
+            pg_client.insert_datum(datum_json)
             logger.info(f"datum logged to db")
 
             ##################################
@@ -72,7 +67,7 @@ def main():
 
             # Insert into Postgres
             if engram_data:
-                insert_engram(postgres_conn, engram_data)
+                pg_client.insert_engram(engram_data)
                 logger.info("Inserted engram to Postgres.")
             else:
                 logger.warning("No engram data to insert.")
@@ -89,10 +84,10 @@ def main():
                     "input_data": message_json,
                     "error_message": f"{e}\n{traceback.format_exc()}",
                 }
-                insert_error(postgres_conn, error_data)
+                pg_client.insert_error(error_data)
                 logger.info("Error logged to Postgres.")
 
-    postgres_conn.close()
+    pg_client.close()
 
 
 if __name__ == "__main__":
