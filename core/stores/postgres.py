@@ -11,13 +11,19 @@ def create_connection(host=config.POSTGRES_HOST):
     """create a database connection to the PostgreSQL database"""
     conn = None
     try:
-        conn = psycopg2.connect(
-            dbname=config.POSTGRES_DB,
-            user=config.POSTGRES_USER,
-            password=config.POSTGRES_PASSWORD,
-            host=host,
-            port=config.POSTGRES_PORT,
-        )
+        if config.POSTGRES_CONNECTION_STRING:
+            logger.info("Using connection string for PostgreSQL connection.")
+            conn = psycopg2.connect(config.POSTGRES_CONNECTION_STRING)
+            return conn
+        else:
+            logger.info("Using individual parameters for PostgreSQL connection.")
+            conn = psycopg2.connect(
+                dbname=config.POSTGRES_DB,
+                user=config.POSTGRES_USER,
+                password=config.POSTGRES_PASSWORD,
+                host=host,
+                port=config.POSTGRES_PORT,
+            )
         return conn
     except psycopg2.Error as e:
         logger.error(e)
